@@ -1,0 +1,7 @@
+Flask
+Pillow
+easyocr
+torch
+torchvision
+openai
+gunicorn

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prescription Details</title>
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 40px;
+            background: linear-gradient(135deg, #E0EAFC, #CFDEF3);
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h2 {
+            color: #4CAF50;
+        }
+
+        p {
+            font-size: 20px;
+            line-height: 1.6;
+            margin-top: 20px;
+            white-space: pre-line;
+        }
+
+        .button-container {
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            margin: 5px;
+            background: #4CAF50;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📝 Simplified Prescription:</h2>
+
+    <!-- Show the simplified text here -->
+    <p id="simplifiedText">{{ simplified_text }}</p>
+
+    <!-- Play, Pause, Stop buttons below the text -->
+    <div class="button-container">
+        <button class="btn" onclick="playSpeech()">🔊 Play</button>
+        <button class="btn" onclick="pauseSpeech()">⏸️ Pause</button>
+        <button class="btn" onclick="stopSpeech()">⏹️ Stop</button>
+    </div>
+</div>
+
+<script>
+    let utterance = null;
+
+    function playSpeech() {
+        const text = document.getElementById('simplifiedText').innerText;
+
+        // If paused, resume
+        if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+            return;
+        }
+
+        // If already speaking, do nothing
+        if (window.speechSynthesis.speaking) {
+            return;
+        }
+
+        // Otherwise create a new utterance and speak
+        utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        window.speechSynthesis.speak(utterance);
+
+        // Reset when done
+        utterance.onend = function() {
+            utterance = null;
+        };
+    }
+
+    function pauseSpeech() {
+        if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+            window.speechSynthesis.pause();
+        }
+    }
+
+    function stopSpeech() {
+        if (window.speechSynthesis.speaking || window.speechSynthesis.paused) {
+            window.speechSynthesis.cancel();
+            utterance = null;
+        }
+    }
+</script>
+
+</body>
+</html>
